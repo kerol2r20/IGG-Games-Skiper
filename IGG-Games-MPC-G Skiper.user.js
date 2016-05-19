@@ -26,5 +26,6 @@
         // $("this > input[name='downloadLink']").attr('value');
         var url = $(this).children("input[name='downloadLink']").attr('value');
         $(this).children("a").attr('href',url);
+        $(this).children("a").attr('target',"_blank");
     });
 })();
