@@ -11,7 +11,6 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
     var pat = /.*xurl=(s?:.*)/i;
     $("a").each(function() {
         var url=$(this).attr('href');
