@@ -54,9 +54,9 @@ const megapat = /mega\.nz/;
         processes.push(process);
     });
     Promise.all(processes).then(() => {
-        document.querySelector('#mega').innerHTML = "Copy Mega Link";
+        document.querySelector('#mega').innerHTML = "Copy All Mega Link";
         document.querySelector('#mega').setAttribute("data-clipboard-text", collections.mega.join("\n"));
-        document.querySelector('#google').innerHTML = "Copy Google Link";
+        document.querySelector('#google').innerHTML = "Copy All Google Link";
         document.querySelector('#google').setAttribute("data-clipboard-text", collections.google.join("\n"));
     });
 })();
