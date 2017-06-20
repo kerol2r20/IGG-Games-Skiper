@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IGG-Games/MPC-G Skiper
 // @namespace    https://greasyfork.org/zh-TW/scripts/19802-igg-games-mpc-g-skiper
-// @version      1.2.1
+// @version      1.2
 // @description  Skip wating AD page in IGG games download link
 // @author       Yu-Hsin Lu
 // @include      http://igg-games.com/*
@@ -16,6 +16,22 @@ const googlepat = /drive\.google\.com/;
 const megapat = /mega\.nz/;
 
 (function() {
+    // Create panel
+    new Clipboard('.clipboard');
+    const titleElement = document.querySelector('h1.title');
+    const megaButton = document.createElement('button');
+    megaButton.classList.add("clipboard");
+    titleElement.append(document.createElement('br'));
+    megaButton.id = "mega";
+    megaButton.innerHTML = "Loading";
+    titleElement.append(megaButton);
+    titleElement.append(document.createElement('br'));
+    const googleButton = document.createElement('button');
+    googleButton.classList.add("clipboard");
+    googleButton.id = "google";
+    googleButton.innerHTML = "Loading";
+    titleElement.append(googleButton);
+
     let collections = {mega: [],google: []};
     let anchors = document.querySelectorAll('a');
     let processes = [];
@@ -37,6 +53,9 @@ const megapat = /mega\.nz/;
         processes.push(process);
     });
     Promise.all(processes).then(() => {
-        console.log(collections);
+        document.querySelector('#mega').innerHTML = "Copy Mega Link";
+        document.querySelector('#mega').setAttribute("data-clipboard-text", collections.mega.join("\n"));
+        document.querySelector('#google').innerHTML = "Copy Google Link";
+        document.querySelector('#google').setAttribute("data-clipboard-text", collections.google.join("\n"));
     });
 })();
