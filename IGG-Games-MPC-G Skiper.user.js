@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 // Global patten
-const pat = /http:\/\/igg-games.com\/urls\/.*/i;
+const pat = /http:\/\/igg-games.com\/linkurls\/.*/i;
 const URLpat = /.*xurl=(.*)$/i;
 const googlepat = /drive\.google\.com/;
 const megapat = /mega\.nz/;
