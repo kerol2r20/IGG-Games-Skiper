@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IGG-Games/MPC-G Skiper
 // @namespace    https://greasyfork.org/zh-TW/scripts/19802-igg-games-mpc-g-skiper
-// @version      2.3
+// @version      2.4
 // @description  Skip wating AD page in IGG games download link
 // @author       Yu-Hsin Lu
 // @include      http://igg-games.com/*
