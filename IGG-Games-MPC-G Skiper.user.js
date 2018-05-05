@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IGG-Games/MPC-G Skiper
 // @namespace    https://greasyfork.org/zh-TW/scripts/19802-igg-games-mpc-g-skiper
-// @version      2.4
+// @version      2.5
 // @description  Skip wating AD page in IGG games download link
 // @author       Yu-Hsin Lu
 // @include      http://igg-games.com/*
@@ -11,8 +11,7 @@
 // ==/UserScript==
 
 // Global patten
-const pat = /http:\/\/igg-games.com\/linkurls\/.*/i;
-const URLpat = /.*xurl=(.*)$/i;
+const URLpat = /.*bluemediafiles.com.*?xurl=(.*)$/i;
 const googlepat = /drive\.google\.com/;
 const megapat = /mega\.nz/;
 
@@ -24,39 +23,27 @@ const megapat = /mega\.nz/;
     megaButton.classList.add("clipboard");
     titleElement.append(document.createElement('br'));
     megaButton.id = "mega";
-    megaButton.innerHTML = "Loading";
+    megaButton.innerHTML = "Copy all mega download link";
     titleElement.append(megaButton);
     titleElement.append(document.createElement('br'));
     const googleButton = document.createElement('button');
     googleButton.classList.add("clipboard");
     googleButton.id = "google";
-    googleButton.innerHTML = "Loading";
+    googleButton.innerHTML = "Copy all google download link";
     titleElement.append(googleButton);
 
     let collections = {mega: [],google: []};
     let anchors = document.querySelectorAll('a');
-    let processes = [];
-    anchors = _.filter(anchors, anchor => pat.test(anchor.href));
-    anchors.forEach(anchor => {
-        const process = fetch(anchor.href).then(res => res.text()).then(data => {
-            const parser = document.createElement('html');
-            parser.innerHTML = data;
-            const targetDOM = parser.querySelector('meta[http-equiv="refresh"]');
-            let targetURL = URLpat.exec(targetDOM.content) ? URLpat.exec(targetDOM.content)[1] : null;
-            if(targetURL) {
-                targetURL = decodeURIComponent(targetURL);
-                targetURL = `http${targetURL}`;
-                anchor.href=targetURL;
-                if(googlepat.test(targetURL)) collections.google.push(targetURL);
-                if(megapat.test(targetURL)) collections.mega.push(targetURL);
-            }
-        });
-        processes.push(process);
+    anchors = Array.apply(null, anchors);
+    let all_downloadlinks = anchors.filter(anchor => URLpat.test(anchor.href)).map(anchor => {
+        const downloadlink = `http${URLpat.exec(anchor.href)[1]}`;
+        anchor.href = downloadlink;
+        return downloadlink;
     });
-    Promise.all(processes).then(() => {
-        document.querySelector('#mega').innerHTML = "Copy All Mega Link";
-        document.querySelector('#mega').setAttribute("data-clipboard-text", collections.mega.join("\n"));
-        document.querySelector('#google').innerHTML = "Copy All Google Link";
-        document.querySelector('#google').setAttribute("data-clipboard-text", collections.google.join("\n"));
-    });
+    all_downloadlinks.filter(downloadlink => googlepat.test(downloadlink)).forEach(downloadlink => collections.google.push(downloadlink));
+    all_downloadlinks.filter(downloadlink => megapat.test(downloadlink)).forEach(downloadlink => collections.mega.push(downloadlink));
+    document.querySelector('#mega').innerHTML = "Copy All Mega Link";
+    document.querySelector('#mega').setAttribute("data-clipboard-text", collections.mega.join("\n"));
+    document.querySelector('#google').innerHTML = "Copy All Google Link";
+    document.querySelector('#google').setAttribute("data-clipboard-text", collections.google.join("\n"));
 })();
